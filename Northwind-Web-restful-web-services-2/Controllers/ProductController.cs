@@ -14,5 +14,7 @@ namespace Northwind.Controllers
             ViewBag.id = id;
             return View(_northwindContext.Categories.OrderBy(c => c.CategoryName));
         }
+
+        public IActionResult Product() => View();
     }
 }

@@ -1,0 +1,62 @@
+@using Northwind.Models
+@model IEnumerable<Category>
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+  .checked {
+    color: #0b86de;
+  }
+</style>
+
+<body>
+
+  <div class="col-lg-8 mx-auto p-3 py-md-5">
+
+
+    <h1>Product Name</h1>
+
+    <div><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span><span class="fa fa-star"></span> - 2 ratings </div>
+    <p>Price: $00.00</p>
+
+    <div class="mb-5">
+      <a class="btn btn-primary btn-lg px-2">Add to Cart</a>
+    </div>
+
+    <hr>
+
+    <div class="row g-5">
+      <h3 class="my-4 ">Customer Reviews Of Product Name</h3>
+
+      <div class="card mb-4 border-0">
+        <div class="container">
+          <h4>John Doe</h4>
+          <p>Rating: <span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span
+              class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></p>
+          <p>Reviewed on: January 28, 2020</p>
+          <p>There is an incredible amount of errors for a simple design like this.
+            1. The rubber feet are NON-Stick meaning I’m now trying to glue them to the board.
+            2. The rubber feet are too short and the voltage terminals are longer, resulting in the rubber feet being
+            pointless. I’m now adding washers to fix this issue.
+
+            I cannot comment on the board quality as I’ve now had to put off testing to fix stupid design flaws.
+
+            I recommend going with another brand and spending the extra buck or two.</p>
+        </div>
+      </div>
+
+
+        <div class="card mb-4 border-0">
+        <div class="container">
+          <h4>Joe Smith</h4>
+          <p>Rating: <span class="fa fa-star checked"></span><span class="fa fa-star "></span><span
+              class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span>
+          <p>Reviewed on: January 20, 2020</p>
+          <p>I hated it so much, No one should buy this</p>
+        </div>
+
+    </div>
+
+  </div>
+</body>
