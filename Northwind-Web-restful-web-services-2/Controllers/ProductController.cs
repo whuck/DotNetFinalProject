@@ -15,11 +15,11 @@ namespace Northwind.Controllers
             return View(_northwindContext.Categories.OrderBy(c => c.CategoryName));
         }
 
-        // public IActionResult Product(int id){
-        //     ViewBag.id = id;
-        //     return View(_northwindContext.Products.Where(p => p.ProductId = id));
-        // }
-        public IActionResult Product(int id) => View(_northwindContext.Products.Where(p => p.ProductId == id));
+        public IActionResult SingleProduct(int productId){
+            ViewBag.productId = productId;
+            return View(_northwindContext.Products.Where(p => p.ProductId == productId));
+        }
+        // public IActionResult SingleProduct(int id) => View(_northwindContext.Products.Where(p => p.ProductId == id));
 
     }
 }

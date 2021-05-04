@@ -10,10 +10,13 @@ $(function () {
                 for (var i = 0; i < response.length; i++){
                     var css = response[i].discontinued ? " class=\"discontinued\"" : "";
                     var row = "<tr" + css + " data-id=\"" + response[i].productId + "\" data-name=\"" + response[i].productName + "\" data-price=\"" + response[i].unitPrice + "\">"
+                        // + "<a asp-action='SingleProduct' asp-route-id=\"" + response[i].productId + "\">"
                         + "<td>" + response[i].productName + "</td>"
                         + "<td class=\"text-right\">$" + response[i].unitPrice.toFixed(2) + "</td>"
                         + "<td class=\"text-right\">" + response[i].unitsInStock + "</td>"
+                        // + "</a>"
                         + "</tr>";
+
                     $('#product_rows').append(row);
                 }
             },
@@ -30,20 +33,45 @@ $(function () {
     $('#Discontinued').on('change', function(){
         getProducts();
     });
+
+
     // delegated event listener
     $('#product_rows').on('click', 'tr', function(){
+        // make sure a customer is logged in
+        // if ($('#User').data('customer').toLowerCase() == "true"){
+        //     $('#ProductId').html($(this).data('id'));
+        //     $('#ProductName').html($(this).data('name'));
+        //     $('#UnitPrice').html($(this).data('price').toFixed(2));
+        //     // calculate and display total in modal
+        //     $('#Quantity').change();
+        //     $('#cartModal').modal();
+        // } else {
+        //     toast("Access Denied", "You must be signed in as a customer to access the cart.");
+        // }
+        var id = $(this).data('id');
+        window.location.href = "/Product/singleproduct/" + id;
+
+    });
+
+    $('#cart').on('click', function(){
         // make sure a customer is logged in
         if ($('#User').data('customer').toLowerCase() == "true"){
             $('#ProductId').html($(this).data('id'));
             $('#ProductName').html($(this).data('name'));
-            $('#UnitPrice').html($(this).data('price').toFixed(2));
+            $('#UnitPrice').html($('#price').html());
             // calculate and display total in modal
             $('#Quantity').change();
             $('#cartModal').modal();
         } else {
             toast("Access Denied", "You must be signed in as a customer to access the cart.");
         }
+        
+
     });
+
+
+
+
     // update total when cart quantity is changed
     $('#Quantity').change(function () {
         var total = parseInt($(this).val()) * parseFloat($('#UnitPrice').html());
@@ -54,13 +82,16 @@ $(function () {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
     $('#addToCart').on('click', function(){
+        var location = window.location.pathname;
+        var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
+        console.log(whatisaproductid)
         $('#cartModal').modal('hide');
         $.ajax({
             headers: { "Content-Type": "application/json" },
             url: "../../api/addtocart",
             type: 'post',
             data: JSON.stringify({
-                    "id": Number($('#ProductId').html()),
+                    "id": Number(whatisaproductid),
                     "email": $('#User').data('email'),
                     "qty": Number($('#Quantity').val()) 
                 }),
@@ -75,6 +106,7 @@ $(function () {
             }
         });
     });
+
     function toast(header, message) {
         $('#toast_header').html(header);
         $('#toast_body').html(message);
