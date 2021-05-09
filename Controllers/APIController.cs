@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Northwind.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Northwind.Controllers
 {
@@ -29,5 +30,9 @@ namespace Northwind.Controllers
         [HttpPost, Route("api/addtocart")]
         // adds a row to the cartitem table
         public CartItem Post([FromBody] CartItemJSON cartItem) => _northwindContext.AddToCart(cartItem);
+
+         [HttpGet, Route("api/review/{id}")]
+        // returns reviews for product
+        public IEnumerable<Review> GetReviews(int id) => _northwindContext.Reviews.Include("Customer").Where(p => p.ProductId == id);
     }
 }
