@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Northwind-Web-restful-web-services-2/bin/Debug/netcoreapp3.1/Northwind.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Northwind.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Northwind-Web-restful-web-services-2",
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {

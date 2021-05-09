@@ -34,7 +34,6 @@ $(function () {
         getProducts();
     });
 
-
     // delegated event listener
     $('#product_rows').on('click', 'tr', function(){
         // make sure a customer is logged in

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Northwind-Web-restful-web-services-2/Northwind.csproj",
+                "${workspaceFolder}/Northwind.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Northwind-Web-restful-web-services-2/Northwind.csproj",
+                "${workspaceFolder}/Northwind.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,7 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/Northwind-Web-restful-web-services-2/Northwind.csproj",
+                "${workspaceFolder}/Northwind.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

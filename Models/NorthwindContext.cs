@@ -58,5 +58,30 @@ namespace Northwind.Models
             cartItem.Product = Products.Find(cartItem.ProductId);
             return cartItem;
         }
+
+         public Review AddToReview(ReviewJSON reviewJSON)
+        {
+            int CustomerId = Customers.FirstOrDefault(c => c.Email == reviewJSON.email).CustomerID;
+            int ProductId = reviewJSON.id;
+            // check for duplicate cart item
+            Review review = Reviews.FirstOrDefault(ci => ci.ProductId == ProductId && ci.CustomerId == CustomerId);
+            if (review == null)
+            {
+                // this is a new cart item
+                review = new Review()
+                {
+                    CustomerId = CustomerId,
+                    ProductId = reviewJSON.id,
+                    Rating = reviewJSON.rating,
+                    Description = reviewJSON.description,
+                    ReviewDate = System.DateTime.Now
+                };
+                Reviews.Add(review);
+            }
+
+            SaveChanges();
+            review.Product = Products.Find(review.ProductId);
+            return review;
+        }
     }
 }

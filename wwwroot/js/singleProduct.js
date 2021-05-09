@@ -9,8 +9,7 @@ $(function () {
         $.getJSON({
             url: "../../api/product/" + url,
             success: function (response, textStatus, jqXhr) {
-                $('#ProductName').html(response.productName);
-                $('#giveMeaName').html(response.productName);
+                $('.ProductName').html(response.productName);
                 $('#price').html(response.unitPrice);
                 console.table(response);
 
@@ -88,4 +87,46 @@ $(function () {
         return displayRating;
     }
 
+    $('#review').on('click', function(){
+        // make sure a customer is logged in
+        if ($('#User').data('customer').toLowerCase() == "true"){
+            $('#product').html($("#ProductName").html());
+        
+            $('#reviewModal').modal();
+        } else {
+            toast("Access Denied", "You must be signed in as a customer to add a review.");
+        }
+        
+
+    });
+
+    $('#addReview').click(AddReview);
+
 });
+
+function AddReview(){
+    var location = window.location.pathname;
+    var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
+    console.log("Review: " + whatisaproductid)
+    //$('#cartModal').modal('hide');
+    $.ajax({
+        headers: { "Content-Type": "application/json" },
+        url: "../../api/addtoreview",
+        type: 'post',
+        data: JSON.stringify({
+                "id": Number(whatisaproductid),
+                "email": "finalcustomer@mail.com",
+                "rating": Number($("#inputRating").val()),
+                "description":$("#inputDescription").val() 
+            }),
+        success: function (response, textStatus, jqXhr) {
+            // success
+            toast("Product Added", response.product.productName + " successfully added to cart.");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // log the error to the console
+            console.log("The following error occured: " + jqXHR.status, errorThrown);
+            toast("Error", "Please try again later.");
+        }
+    });
+}
