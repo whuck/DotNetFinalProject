@@ -35,8 +35,8 @@ namespace Northwind.Controllers
         // returns reviews for product
         public IEnumerable<Review> GetReviews(int id) => _northwindContext.Reviews.Include("Customer").Where(p => p.ProductId == id);
 
-        [HttpPost, Route("api/addtoreview")]
+        [HttpPost, Route("api/addreview")]
         // adds a row to the cartitem table
-        public Review Post([FromBody] ReviewJSON review) => _northwindContext.AddToReview(review);
+        public Review Post([FromBody] ReviewJSON review) => _northwindContext.AddReview(review);
     }
 }

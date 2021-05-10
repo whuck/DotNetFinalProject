@@ -10,20 +10,17 @@ $(function () {
             url: "../../api/product/" + url,
             success: function (response, textStatus, jqXhr) {
                 $('.ProductName').html(response.productName);
-                $('#price').html(response.unitPrice);
-                console.table(response);
+                $('.price').html(response.unitPrice);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 // log the error to the console
                 console.log("The following error occured: " + textStatus, errorThrown);
-                console.log(url)
             }
         });
         $.getJSON({
             url: "../../api/review/" + url,
             success: function (response, textStatus, jqXhr) {
-                console.table(response);
 
                 // response.rating
                 var count = 0;
@@ -31,8 +28,7 @@ $(function () {
                 response.forEach(element => {
                     count++;
                     sum += element.rating;
-                    console.log(element.rating)
-                    console.log(sum + ", " + count)
+                   
                     writeReview(element);
                 });
                 ratingAvg = sum / count;
@@ -89,35 +85,128 @@ $(function () {
 
     $('#review').on('click', function(){
         // make sure a customer is logged in
-        if ($('#User').data('customer').toLowerCase() == "true"){
-            $('#product').html($("#ProductName").html());
-        
+        if ($('#User').data('customer').toLowerCase() == "true"){        
             $('#reviewModal').modal();
         } else {
-            toast("Access Denied", "You must be signed in as a customer to add a review.");
+            //toast("Access Denied", "You must be signed in as a customer to add a review.");
         }
         
 
     });
 
+    $('#cart').on('click', function(){
+        // make sure a customer is logged in
+        if ($('#User').data('customer').toLowerCase() == "true"){
+            // calculate and display total in modal
+            $('#Quantity').change();
+            $('#cartModal').modal();
+        } else {
+            toast("Access Denied", "You must be signed in as a customer to access the cart.");
+        }
+        
+
+    });
+     // update total when cart quantity is changed
+     $('#Quantity').change(function () {
+        var total = parseInt($(this).val()) * parseFloat($('.price').html());
+        $('#Total').html(numberWithCommas(total.toFixed(2)));
+    });
+
+    $('#addToCart').on('click', AddtoCart);
+   
+
     $('#addReview').click(AddReview);
 
 });
-
+ // function to display commas in number
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 function AddReview(){
     var location = window.location.pathname;
     var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
     console.log("Review: " + whatisaproductid)
-    //$('#cartModal').modal('hide');
+    $('#reviewModal').modal('hide');
     $.ajax({
         headers: { "Content-Type": "application/json" },
-        url: "../../api/addtoreview",
+        url: "../../api/addreview",
         type: 'post',
         data: JSON.stringify({
                 "id": Number(whatisaproductid),
-                "email": "finalcustomer@mail.com",
+                "email": $('#User').data('email'),
                 "rating": Number($("#inputRating").val()),
                 "description":$("#inputDescription").val() 
+            }),
+        success: function (response, textStatus, jqXhr) {
+            // success
+            reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            // log the error to the console
+            console.log("The following error occured: " + jqXHR.status, errorThrown);
+            toast("Error", "Please try again later.");
+        }
+    });
+    
+
+
+
+
+    // update total when cart quantity is changed
+    $('#Quantity').change(function () {
+        var total = parseInt($(this).val()) * parseFloat($('#UnitPrice').html());
+        $('#Total').html(numberWithCommas(total.toFixed(2)));
+    });
+    // function to display commas in number
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    $('#addToCart').on('click', function(){
+        var location = window.location.pathname;
+        var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
+        console.log(whatisaproductid)
+        $('#cartModal').modal('hide');
+        $.ajax({
+            headers: { "Content-Type": "application/json" },
+            url: "../../api/addtocart",
+            type: 'post',
+            data: JSON.stringify({
+                    "id": Number(whatisaproductid),
+                    "email": $('#User').data('email'),
+                    "qty": Number($('#Quantity').val()) 
+                }),
+            success: function (response, textStatus, jqXhr) {
+                // success
+                toast("Product Added", response.product.productName + " successfully added to cart.");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // log the error to the console
+                console.log("The following error occured: " + jqXHR.status, errorThrown);
+                toast("Error", "Please try again later.");
+            }
+        });
+    });
+
+    function toast(header, message) {
+        $('#toast_header').html(header);
+        $('#toast_body').html(message);
+        $('#cart_toast').toast({ delay: 2500 }).toast('show');
+    }
+    
+}
+function AddtoCart(){
+    var location = window.location.pathname;
+    var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
+    console.log(whatisaproductid)
+    $('#cartModal').modal('hide');
+    $.ajax({
+        headers: { "Content-Type": "application/json" },
+        url: "../../api/addtocart",
+        type: 'post',
+        data: JSON.stringify({
+                "id": Number(whatisaproductid),
+                "email": $('#User').data('email'),
+                "qty": Number($('#Quantity').val()) 
             }),
         success: function (response, textStatus, jqXhr) {
             // success
@@ -129,4 +218,12 @@ function AddReview(){
             toast("Error", "Please try again later.");
         }
     });
+}
+function toast(header, message) {
+    $('#toast_header').html(header);
+    $('#toast_body').html(message);
+    $('#cart_toast').toast({ delay: 2500 }).toast('show');
+}
+function reload() {
+    location.reload();
 }

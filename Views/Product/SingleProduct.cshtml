@@ -19,7 +19,7 @@
     @* <div><span class="fa fa-star"></span> - 2
         ratings </div> *@
         <div id="rating"></div>
-    <p>Price: $<span id="price"></span></p>
+    <p>Price: $<span class="price"></span></p>
 
     <div class="mb-5">
         <a id="cart" class="btn btn-primary btn-lg px-2">Add to Cart</a>
@@ -86,7 +86,7 @@
                 <div class="row">
                     <div class="col col-xs-5 pt-2 ProductName">Cool Product</div>
                     <div class="col col-xs-2 pt-2 text-right">
-                        $<span id="UnitPrice">9.99</span>
+                        $<span class="price">9.99</span>
                     </div>
                     <div class="col col-xs-2">
                         <input type="number" min="1" value="1" id="Quantity" class="form-control" />
@@ -116,7 +116,6 @@
 </div>
 @section scripts
 {
-    <script src="../../js/product.js"></script>
     <script src="../../js/singleProduct.js"></script>
 
 }

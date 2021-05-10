@@ -59,7 +59,7 @@ namespace Northwind.Models
             return cartItem;
         }
 
-         public Review AddToReview(ReviewJSON reviewJSON)
+         public Review AddReview(ReviewJSON reviewJSON)
         {
             int CustomerId = Customers.FirstOrDefault(c => c.Email == reviewJSON.email).CustomerID;
             int ProductId = reviewJSON.id;
