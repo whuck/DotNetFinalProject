@@ -52,63 +52,7 @@ $(function () {
 
     });
 
-    $('#cart').on('click', function(){
-        // make sure a customer is logged in
-        if ($('#User').data('customer').toLowerCase() == "true"){
-            $('#ProductId').html($(this).data('id'));
-            $('#ProductName').html($(this).data('name'));
-            $('#UnitPrice').html($('#price').html());
-            // calculate and display total in modal
-            $('#Quantity').change();
-            $('#cartModal').modal();
-        } else {
-            toast("Access Denied", "You must be signed in as a customer to access the cart.");
-        }
-        
-
-    });
 
 
-
-
-    // update total when cart quantity is changed
-    $('#Quantity').change(function () {
-        var total = parseInt($(this).val()) * parseFloat($('#UnitPrice').html());
-        $('#Total').html(numberWithCommas(total.toFixed(2)));
-    });
-    // function to display commas in number
-    function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    $('#addToCart').on('click', function(){
-        var location = window.location.pathname;
-        var whatisaproductid = location.substring(location.lastIndexOf("/") + 1);
-        console.log(whatisaproductid)
-        $('#cartModal').modal('hide');
-        $.ajax({
-            headers: { "Content-Type": "application/json" },
-            url: "../../api/addtocart",
-            type: 'post',
-            data: JSON.stringify({
-                    "id": Number(whatisaproductid),
-                    "email": $('#User').data('email'),
-                    "qty": Number($('#Quantity').val()) 
-                }),
-            success: function (response, textStatus, jqXhr) {
-                // success
-                toast("Product Added", response.product.productName + " successfully added to cart.");
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                // log the error to the console
-                console.log("The following error occured: " + jqXHR.status, errorThrown);
-                toast("Error", "Please try again later.");
-            }
-        });
-    });
-
-    function toast(header, message) {
-        $('#toast_header').html(header);
-        $('#toast_body').html(message);
-        $('#cart_toast').toast({ delay: 2500 }).toast('show');
-    }
+    
 });

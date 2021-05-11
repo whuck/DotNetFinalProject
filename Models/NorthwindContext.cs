@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace Northwind.Models
@@ -13,6 +14,13 @@ namespace Northwind.Models
         public DbSet<Customer> Customers { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetails> OrderDetails { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderDetails>()
+            .HasKey(od => new { od.OrderId, od.ProductId });
+        }
 
         public void AddCustomer(Customer customer)
         {
@@ -59,24 +67,32 @@ namespace Northwind.Models
             return cartItem;
         }
 
-         public Review AddToReview(ReviewJSON reviewJSON)
+        public Review AddReview(ReviewJSON reviewJSON)
         {
             int CustomerId = Customers.FirstOrDefault(c => c.Email == reviewJSON.email).CustomerID;
             int ProductId = reviewJSON.id;
             // check for duplicate cart item
-            Review review = Reviews.FirstOrDefault(ci => ci.ProductId == ProductId && ci.CustomerId == CustomerId);
-            if (review == null)
+            Review review = Reviews.FirstOrDefault(r => r.ProductId == ProductId && r.CustomerId == CustomerId);
+            var Order = Orders.Join(OrderDetails, o => o.OrderId, od => od.OrderId, (o, od) => new { orderID = o.OrderId, productId = od.ProductId, customerId = o.CustomerId }).FirstOrDefault(i => i.productId == ProductId && i.customerId == CustomerId);
+
+            if (Order != null)
             {
-                // this is a new cart item
-                review = new Review()
+                if (review == null)
                 {
-                    CustomerId = CustomerId,
-                    ProductId = reviewJSON.id,
-                    Rating = reviewJSON.rating,
-                    Description = reviewJSON.description,
-                    ReviewDate = System.DateTime.Now
-                };
-                Reviews.Add(review);
+                    // this is a new cart item
+                    review = new Review()
+                    {
+                        CustomerId = CustomerId,
+                        ProductId = reviewJSON.id,
+                        Rating = reviewJSON.rating,
+                        Description = reviewJSON.description,
+                        ReviewDate = System.DateTime.Now
+                    };
+                    Reviews.Add(review);
+                } else {
+                    return review;
+                }
+            } else {
             }
 
             SaveChanges();

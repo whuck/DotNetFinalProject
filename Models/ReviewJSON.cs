@@ -4,7 +4,7 @@ namespace Northwind.Models
     {
         public int id { get; set; }
         public string email { get; set; }
-        public int rating { get; set; }
+        public decimal rating { get; set; }
         public string description {get;set;}
         
     }
